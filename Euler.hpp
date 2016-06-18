@@ -32,13 +32,24 @@ inline float ATan2(const float &y, const float &x)
 	return (float)atan2(y, x);
 }
 
-//Rounding Functions
+// Rounding Functions
 
 inline float Floor(const float &f)
 {
 	__m128 mm1 = _mm_set_ss(f);
 
 	__m128 mm2 = _mm_round_ps(mm1, _MM_FROUND_FLOOR);
+
+	return _mm_cvtss_f32(mm2);
+}
+
+// Sqrt Function
+
+inline float Sqrt(const float &f)
+{
+	__m128 mm1 = _mm_set_ss(f);
+
+	__m128 mm2 = _mm_sqrt_ss(mm1);
 
 	return _mm_cvtss_f32(mm2);
 }
@@ -198,7 +209,7 @@ inline bool Vector2D::operator!=(const Vector2D &v) const
 
 inline float Vector2D::Length() const
 {
-	return sqrt((x * x) + (y * y));
+	return Sqrt((x * x) + (y * y));
 }
 
 inline float Vector2D::LengthSqr() const
@@ -459,7 +470,7 @@ inline bool Euler::operator!=(const Euler &e) const
 
 inline float Euler::Length() const
 {
-	return sqrt((x * x) + (y * y) + (z * z));
+	return Sqrt((x * x) + (y * y) + (z * z));
 }
 
 inline float Euler::LengthSqr() const
@@ -469,7 +480,7 @@ inline float Euler::LengthSqr() const
 
 inline float Euler::Length2D() const
 {
-	return sqrt((x * x) + (y * y));
+	return Sqrt((x * x) + (y * y));
 }
 
 inline float Euler::Length2DSqr() const

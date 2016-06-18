@@ -1,0 +1,1 @@
+The "Euler" Class is a 2D3D Angle and Vector class with some dank memes in it.
