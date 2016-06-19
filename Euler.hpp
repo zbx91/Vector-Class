@@ -1,5 +1,7 @@
 #pragma once
 
+#define FORCEINLINE __forceinline
+
 #include "Math.hpp"
 
 // Vector Two Dimensional
@@ -12,46 +14,46 @@ public:
 	Vector2D();
 	Vector2D(float, float);
 
-	float		&operator[](char);
+	float	&operator[](char);
 	Vector2D	&operator=(const Vector2D &);
 
-	Vector2D	&operator+=(const Vector2D &);
-	Vector2D	&operator-=(const Vector2D &);
-	Vector2D	&operator*=(const float);
-	Vector2D	&operator/=(const float);
+	FORCEINLINE Vector2D	&operator+=(const Vector2D &);
+	FORCEINLINE Vector2D	&operator-=(const Vector2D &);
+	FORCEINLINE Vector2D	&operator*=(const float);
+	FORCEINLINE Vector2D	&operator/=(const float);
 
 	Vector2D	operator+(const Vector2D &) const;
 	Vector2D	operator-(const Vector2D &) const;
 	Vector2D	operator*(const float) const;
 	Vector2D	operator/(const float) const;
 
-	bool		operator==(const Vector2D &) const;
-	bool		operator!=(const Vector2D &) const;
+	bool	operator==(const Vector2D &) const;
+	bool	operator!=(const Vector2D &) const;
 
-	void		Rotate(const float);
+	void	Rotate(const float);
 
-	float		Length() const;
-	float		LengthSqr() const;
+	float	Length() const;
+	FORCEINLINE float	LengthSqr() const;
 
-	float		DistTo(const Vector2D &) const;
-	float		DistToSqr(const Vector2D &) const;
-	bool		WithinAARect(const Vector2D &, const Vector2D &) const;
+	float	DistTo(const Vector2D &) const;
+	FORCEINLINE float	DistToSqr(const Vector2D &) const;
+	bool	WithinAARect(const Vector2D &, const Vector2D &) const;
 
-	float		Dot(const Vector2D &) const;
+	FORCEINLINE float	Dot(const Vector2D &) const;
 
-	float		Normalize();
+	float	Normalize();
 
-	float		ToAngle() const;
+	float	ToAngle() const;
 
-	void		Random(const float, const float);
-	void		Negate();
-	void		Clear();
+	void	Random(const float, const float);
+	void	Negate();
+	void	Clear();
 
-	void		CopyToArray(float *) const;
-	float		*Base() const;
+	void	CopyToArray(float *) const;
+	float	*Base() const;
 
-	bool		IsValid() const;
-	bool		IsZero(const float) const;
+	bool	IsValid() const;
+	bool	IsZero(const float) const;
 };
 
 inline Vector2D::Vector2D()
@@ -70,7 +72,7 @@ inline float &Vector2D::operator[](char i)
 	return ((float *)this)[i];
 }
 
-inline Vector2D &Vector2D::operator=(const Vector2D &v)
+FORCEINLINE Vector2D &Vector2D::operator=(const Vector2D &v)
 {
 	x = v.x;
 	y = v.y;
@@ -78,7 +80,7 @@ inline Vector2D &Vector2D::operator=(const Vector2D &v)
 	return *this;
 }
 
-inline Vector2D &Vector2D::operator+=(const Vector2D &v)
+FORCEINLINE Vector2D &Vector2D::operator+=(const Vector2D &v)
 {
 	x += v.x;
 	y += v.y;
@@ -86,7 +88,7 @@ inline Vector2D &Vector2D::operator+=(const Vector2D &v)
 	return *this;
 }
 
-inline Vector2D &Vector2D::operator-=(const Vector2D &v)
+FORCEINLINE Vector2D &Vector2D::operator-=(const Vector2D &v)
 {
 	x -= v.x;
 	y -= v.y;
@@ -94,7 +96,7 @@ inline Vector2D &Vector2D::operator-=(const Vector2D &v)
 	return *this;
 }
 
-inline Vector2D &Vector2D::operator*=(const float &f)
+FORCEINLINE Vector2D &Vector2D::operator*=(const float f)
 {
 	x *= f;
 	y *= f;
@@ -102,7 +104,7 @@ inline Vector2D &Vector2D::operator*=(const float &f)
 	return *this;
 }
 
-inline Vector2D &Vector2D::operator/=(const float &f)
+FORCEINLINE Vector2D &Vector2D::operator/=(const float f)
 {
 	x /= f + M_FLT_EPSILON;
 	y /= f + M_FLT_EPSILON;
@@ -120,12 +122,12 @@ inline Vector2D Vector2D::operator-(const Vector2D &v) const
 	return Vector2D(x - v.x, y - v.y);
 }
 
-inline Vector2D Vector2D::operator*(const float &f) const
+inline Vector2D Vector2D::operator*(const float f) const
 {
 	return Vector2D(x * f, y * f);
 }
 
-inline Vector2D Vector2D::operator/(const float &f) const
+inline Vector2D Vector2D::operator/(const float f) const
 {
 	return Vector2D(x / (f + M_FLT_EPSILON),
 		y / (f + M_FLT_EPSILON));
@@ -146,7 +148,7 @@ inline float Vector2D::Length() const
 	return Sqrt((x * x) + (y * y));
 }
 
-inline float Vector2D::LengthSqr() const
+FORCEINLINE float Vector2D::LengthSqr() const
 {
 	return (x * x) + (y * y);
 }
@@ -156,24 +158,24 @@ inline float Vector2D::DistTo(const Vector2D &v) const
 	return (*this - v).Length();
 }
 
-inline float Vector2D::DistToSqr(const Vector2D &v) const
+FORCEINLINE float Vector2D::DistToSqr(const Vector2D &v) const
 {
 	return (*this - v).LengthSqr();
 }
 
-inline bool Vector2D::WithinAARect(const Vector2D &m, const Vector2D &M) const // Rect Minimum, Rect Maximum
+inline bool Vector2D::WithinAARect(const Vector2D &min, const Vector2D &max) const
 {
-	return ((x > m.x) && (x < M.x) &&
-		(y > m.y) && (y < M.y));
+	return ((x > min.x) && (x < max.x) &&
+		(y > min.y) && (y < max.y));
 }
 
-inline void Vector2D::Rotate(const float &f)
+inline void Vector2D::Rotate(const float f)
 {
 	float _x, _y;
 
 	float s, c;
 
-	SinCos(Deg2Rad(f), s, c);
+	SinCos(DEG2RAD(f), s, c);
 
 	_x = x;
 	_y = y;
@@ -182,7 +184,7 @@ inline void Vector2D::Rotate(const float &f)
 	y = (_x * s) + (_y * c);
 }
 
-inline float Vector2D::Dot(const Vector2D &v) const
+FORCEINLINE float Vector2D::Dot(const Vector2D &v) const
 {
 	return (x * v.x) + (y * v.y);
 }
@@ -202,10 +204,10 @@ inline float Vector2D::ToAngle() const
 	return ATan2(y, x);
 }
 
-inline void Vector2D::Random(const float &m, const float &M) // Minimum, Maximum
+inline void Vector2D::Random(const float min, const float max)
 {
-	x = m + ((float)rand() / RAND_MAX) * (M - m);
-	y = m + ((float)rand() / RAND_MAX) * (M - m);
+	x = min + ((float)rand() / RAND_MAX) * (max - min);
+	y = min + ((float)rand() / RAND_MAX) * (max - min);
 }
 
 inline void Vector2D::Negate()
@@ -237,10 +239,10 @@ inline bool Vector2D::IsValid() const
 	return isfinite(x) && isfinite(y);
 }
 
-inline bool Vector2D::IsZero(const float &t = 0.01f) const // Tolerance
+inline bool Vector2D::IsZero(const float tolerance = 0.01f) const
 {
-	return (x > -t && x < t &&
-		y > -t && y < t);
+	return (x > -tolerance && x < tolerance &&
+		y > -tolerance && y < tolerance);
 }
 
 // Euler Three-Dimensional (Angle & Vector)
@@ -258,54 +260,54 @@ public:
 	float		&operator[](char);
 	Euler		&operator=(const Euler &);
 
-	Euler		&operator+=(const Euler &);
-	Euler		&operator-=(const Euler &);
-	Euler		&operator*=(const float &);
-	Euler		&operator/=(const float &);
+	FORCEINLINE Euler		&operator+=(const Euler &);
+	FORCEINLINE Euler		&operator-=(const Euler &);
+	FORCEINLINE Euler		&operator*=(const float);
+	FORCEINLINE Euler		&operator/=(const float);
 
-	Euler		operator+(const Euler &) const;
-	Euler		operator-(const Euler &) const;
-	Euler		operator*(const float &) const;
-	Euler		operator/(const float &) const;
+	Euler	operator+(const Euler &) const;
+	Euler	operator-(const Euler &) const;
+	Euler	operator*(const float) const;
+	Euler	operator/(const float) const;
 
-	bool		operator==(const Euler &) const;
-	bool		operator!=(const Euler &) const;
+	bool	operator==(const Euler &) const;
+	bool	operator!=(const Euler &) const;
 
-	float		Length() const;
-	float		LengthSqr() const;
-	float		Length2D() const;
-	float		Length2DSqr() const;
+	float	Length() const;
+	FORCEINLINE float	LengthSqr() const;
+	float	Length2D() const;
+	FORCEINLINE float	Length2DSqr() const;
 
-	float		DistTo(const Vector &) const;
-	float		DistToSqr(const Vector &) const;
-	bool		WithinAABox(const Vector &, const Vector &) const;
+	float	DistTo(const Vector &) const;
+	FORCEINLINE float	DistToSqr(const Vector &) const;
+	bool	WithinAABox(const Vector &, const Vector &) const;
 
-	void		Rotate(const Angle &);
-	void		Rotate2D(const float &);
+	void	Rotate(const Angle &);
+	void	Rotate2D(const float);
 
-	Vector		Cross(const Vector &) const;
-	float		Dot(const Vector &) const;
+	Vector	Cross(const Vector &) const;
+	FORCEINLINE float	Dot(const Vector &) const;
 
-	float		NormalizeVector();
-	void		NormalizeAngle();
+	float	NormalizeVector();
+	void	NormalizeAngle();
 
-	Angle		&ToAngle() const;
-	Vector		&ToVector() const;
-	Vector2D	&ToVector2D() const;
+	Angle	ToAngle() const;
+	Vector	ToVector() const;
+	Vector2D	ToVector2D() const;
 
-	Vector		&Forward() const;
-	Vector		&Right() const;
-	Vector		&Up() const;
+	Vector	Forward() const;
+	Vector	Right() const;
+	Vector	Up() const;
 
-	void		Random(const float &, const float &);
-	void		Negate();
-	void		Clear();
+	void	Random(const float, const float);
+	void	Negate();
+	void	Clear();
 
-	void		CopyToArray(float *) const;
-	float		*Base() const;
+	void	CopyToArray(float *) const;
+	float	*Base() const;
 
-	bool		IsValid() const;
-	bool		IsZero(const float &) const;
+	bool	IsValid() const;
+	bool	IsZero(const float) const;
 };
 
 inline Euler::Euler()
@@ -334,7 +336,7 @@ inline Euler &Euler::operator=(const Euler &e)
 	return *this;
 }
 
-inline Euler &Euler::operator+=(const Euler &e)
+FORCEINLINE Euler &Euler::operator+=(const Euler &e)
 {
 	x += e.x;
 	y += e.y;
@@ -343,7 +345,7 @@ inline Euler &Euler::operator+=(const Euler &e)
 	return *this;
 }
 
-inline Euler &Euler::operator-=(const Euler &e)
+FORCEINLINE Euler &Euler::operator-=(const Euler &e)
 {
 	x -= e.x;
 	y -= e.y;
@@ -352,7 +354,7 @@ inline Euler &Euler::operator-=(const Euler &e)
 	return *this;
 }
 
-inline Euler &Euler::operator*=(const float &f)
+FORCEINLINE Euler &Euler::operator*=(const float f)
 {
 	x *= f;
 	y *= f;
@@ -361,7 +363,7 @@ inline Euler &Euler::operator*=(const float &f)
 	return *this;
 }
 
-inline Euler &Euler::operator/=(const float &f)
+FORCEINLINE Euler &Euler::operator/=(const float f)
 {
 	x /= f + M_FLT_EPSILON;
 	y /= f + M_FLT_EPSILON;
@@ -380,12 +382,12 @@ inline Euler Euler::operator-(const Euler &e) const
 	return Euler(x - e.x, y - e.y, z - e.z);
 }
 
-inline Euler Euler::operator*(const float &f) const
+inline Euler Euler::operator*(const float f) const
 {
 	return Euler(x * f, y * f, z * f);
 }
 
-inline Euler Euler::operator/(const float &f) const
+inline Euler Euler::operator/(const float f) const
 {
 	return Euler(x / (f + M_FLT_EPSILON),
 		y / (f + M_FLT_EPSILON),
@@ -407,7 +409,7 @@ inline float Euler::Length() const
 	return Sqrt((x * x) + (y * y) + (z * z));
 }
 
-inline float Euler::LengthSqr() const
+FORCEINLINE float Euler::LengthSqr() const
 {
 	return (x * x) + (y * y) + (z * z);
 }
@@ -417,7 +419,7 @@ inline float Euler::Length2D() const
 	return Sqrt((x * x) + (y * y));
 }
 
-inline float Euler::Length2DSqr() const
+FORCEINLINE float Euler::Length2DSqr() const
 {
 	return (x * x) + (y * y);
 }
@@ -427,16 +429,16 @@ inline float Euler::DistTo(const Vector &v) const
 	return (*this - v).Length();
 }
 
-inline float Euler::DistToSqr(const Vector &v) const
+FORCEINLINE float Euler::DistToSqr(const Vector &v) const
 {
 	return (*this - v).LengthSqr();
 }
 
-inline bool Euler::WithinAABox(const Vector &m, const Vector &M) const // Box Minimum, Box Maximum
+inline bool Euler::WithinAABox(const Vector &min, const Vector &max) const
 {
-	return ((x > m.x) && (x < M.x) &&
-			(y > m.y) && (y < M.y) &&
-			(z > m.z) && (z < M.z));
+	return ((x > min.x) && (x < max.x) &&
+			(y > min.y) && (y < max.y) &&
+			(z > min.z) && (z < max.z));
 }
 
 inline void Euler::Rotate(const Angle &a)
@@ -445,7 +447,7 @@ inline void Euler::Rotate(const Angle &a)
 
 	float s, c;
 
-	SinCos(Deg2Rad(a.x), s, c);
+	SinCos(DEG2RAD(a.x), s, c);
 
 	_y = y;
 	_z = z;
@@ -453,7 +455,7 @@ inline void Euler::Rotate(const Angle &a)
 	y = (_y * c) - (_z * s);
 	z = (_y * s) + (_z * c);
 
-	SinCos(Deg2Rad(a.y), s, c);
+	SinCos(DEG2RAD(a.y), s, c);
 
 	_x = x;
 	_z = z;
@@ -461,7 +463,7 @@ inline void Euler::Rotate(const Angle &a)
 	x = (_x * c) + (_z * s);
 	z = (-_x * s) + (_z * c);
 
-	SinCos(Deg2Rad(a.z), s, c);
+	SinCos(DEG2RAD(a.z), s, c);
 
 	_x = x;
 	_y = y;
@@ -470,13 +472,13 @@ inline void Euler::Rotate(const Angle &a)
 	y = (_x * s) + (_y * c);
 }
 
-inline void Euler::Rotate2D(const float &f)
+inline void Euler::Rotate2D(const float f)
 {
 	float _x, _y;
 
 	float s, c;
 
-	SinCos(Deg2Rad(f), s, c);
+	SinCos(DEG2RAD(f), s, c);
 
 	_x = x;
 	_y = y;
@@ -492,7 +494,7 @@ inline Vector Euler::Cross(const Vector &v) const
 		(x * v.y) - (y * v.x));
 }
 
-inline float Euler::Dot(const Vector &v) const
+FORCEINLINE float Euler::Dot(const Vector &v) const
 {
 	return (x * v.x) + (y * v.y) + (z * v.z);
 }
@@ -509,9 +511,9 @@ inline float Euler::NormalizeVector()
 
 inline void Euler::NormalizeAngle()
 {
-	_NormalizeAngle(x);
-	_NormalizeAngle(y);
-	_NormalizeAngle(z);
+	x = _NormalizeAngle(x);
+	y = _NormalizeAngle(y);
+	z = _NormalizeAngle(z);
 }
 
 inline Angle &Euler::ToAngle() const
@@ -519,61 +521,61 @@ inline Angle &Euler::ToAngle() const
 	if (x == 0.f && y == 0.f)
 		return Angle(z > 0.f ? -90.f : 90.f, 0.f, 0.f);
 
-	return Angle(-Rad2Deg(ASin(z / (Length() + M_FLT_EPSILON))), Rad2Deg(ATan2(y, x)), 0.f);
+	return Angle(-RAD2DEG(ASin(z / (Length() + M_FLT_EPSILON))), RAD2DEG(ATan2(y, x)), 0.f);
 }
 
-inline Vector &Euler::ToVector() const
+inline Vector Euler::ToVector() const
 {
-	static float sx, cx, sy, cy;
+	float sx, cx, sy, cy;
 
-	SinCos(Deg2Rad(x), sx, cx);
-	SinCos(Deg2Rad(y), sy, cy);
+	SinCos(DEG2RAD(x), sx, cx);
+	SinCos(DEG2RAD(y), sy, cy);
 
 	return Vector(sx * cy, sx*sy, cx);
 }
 
-inline Vector2D &Euler::ToVector2D() const
+inline Vector2D Euler::ToVector2D() const
 {
 	return Vector2D(x, y);
 }
 
-inline Vector &Euler::Forward() const
+inline Vector Euler::Forward() const
 {
-	static float sx, cx, sy, cy;
+	float sx, cx, sy, cy;
 
-	SinCos(Deg2Rad(x), sx, cx);
-	SinCos(Deg2Rad(y), sy, cy);
+	SinCos(DEG2RAD(x), sx, cx);
+	SinCos(DEG2RAD(y), sy, cy);
 
 	return Vector(sx * cy, sx * sy, cx);
 }
 
-inline Vector &Euler::Right() const
+inline Vector Euler::Right() const
 {
-	static float sx, cx, sy, cy, sz, cz;
+	float sx, cx, sy, cy, sz, cz;
 
-	SinCos(Deg2Rad(x), sx, cx);
-	SinCos(Deg2Rad(y), sy, cy);
-	SinCos(Deg2Rad(z), sz, cz);
+	SinCos(DEG2RAD(x), sx, cx);
+	SinCos(DEG2RAD(y), sy, cy);
+	SinCos(DEG2RAD(z), sz, cz);
 
 	return Vector((-sx * cy * sz) + (cz * sy), (-sx * sy * sz) - (cy * cz), -cx * sz);
 }
 
-inline Vector &Euler::Up() const
+inline Vector Euler::Up() const
 {
-	static float sx, cx, sy, cy, sz, cz;
+	float sx, cx, sy, cy, sz, cz;
 
-	SinCos(Deg2Rad(x), sx, cx);
-	SinCos(Deg2Rad(y), sy, cy);
-	SinCos(Deg2Rad(z), sz, cz);
+	SinCos(DEG2RAD(x), sx, cx);
+	SinCos(DEG2RAD(y), sy, cy);
+	SinCos(DEG2RAD(z), sz, cz);
 
 	return Vector((sx * cy * cz) + (sy * sz), (sx * sy * cz) - (cy * sz), cx * cz);
 }
 
-inline void Euler::Random(const float &m, const float &M) // Minimum, Maximum
+inline void Euler::Random(const float min, const float max)
 {
-	x = m + ((float)rand() / RAND_MAX) * (M - m);
-	y = m + ((float)rand() / RAND_MAX) * (M - m);
-	z = m + ((float)rand() / RAND_MAX) * (M - m);
+	x = min + ((float)rand() / RAND_MAX) * (max - min);
+	y = min + ((float)rand() / RAND_MAX) * (max - min);
+	z = min + ((float)rand() / RAND_MAX) * (max - min);
 }
 
 inline void Euler::Negate()
@@ -607,11 +609,11 @@ inline bool Euler::IsValid() const
 	return isfinite(x) && isfinite(y) && isfinite(z);
 }
 
-inline bool Euler::IsZero(const float &t = 0.01f) const // Tolerance
+inline bool Euler::IsZero(const float tolerance = 0.01f) const
 {
-	return (x > -t && x < t &&
-		y > -t && y < t &&
-		z > -t && z < t);
+	return (x > -tolerance && x < tolerance &&
+		y > -tolerance && y < tolerance &&
+		z > -tolerance && z < tolerance);
 }
 
 // Three-Dimensional Conversion Functions
@@ -629,38 +631,38 @@ inline void VectorToAngle(const Vector &v, Angle &a)
 	}
 	else
 	{
-		a.x = -Rad2Deg(asin(v.z / (v.Length() + M_FLT_EPSILON)));
-		a.y = Rad2Deg(atan2(v.y, v.x));
+		a.x = -RAD2DEG(asin(v.z / (v.Length() + M_FLT_EPSILON)));
+		a.y = RAD2DEG(atan2(v.y, v.x));
 	}
 
 	a.z = 0.f;
 }
 
-inline void AngleToVector(const Angle &a, Vector *f,  Vector *r, Vector *u) // Angle, Forward, Right, Up
+inline void AngleToVector(const Angle &a, Vector *forward,  Vector *right, Vector *up)
 {
 	float sx, cx, sy, cy, sz, cz;
 	SinCos(Deg2Rad(a.x), sx, cx);
 	SinCos(Deg2Rad(a.y), sy, cy);
 	SinCos(Deg2Rad(a.z), sz, cz);
 
-	if (f)
+	if (forward)
 	{
-		f->x = sx * cy;
-		f->y = sx * sy;
-		f->z = cx;
+		forward->x = sx * cy;
+		forward->y = sx * sy;
+		forward->z = cx;
 	}
 
-	if (r)
+	if (right)
 	{
-		r->x = cx*sy;
-		r->y = (sx * sy * sz) + (cy * cz);
-		r->z = (sx * sy * cz) - (cy * sz);
+		right->x = cx*sy;
+		right->y = (sx * sy * sz) + (cy * cz);
+		right->z = (sx * sy * cz) - (cy * sz);
 	}
 
-	if (u)
+	if (up)
 	{
-		u->x = -sx;
-		u->y = cx * sz;
-		u->z = cx * cz;
+		up->x = -sx;
+		up->y = cx * sz;
+		up->z = cx * cz;
 	}
 }

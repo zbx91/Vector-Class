@@ -1,4 +1,3 @@
-
 #include <iostream>
 
 // Constants
@@ -8,32 +7,25 @@
 
 // Angle Conversion Functions
 
-inline float Rad2Deg(const float &f)
-{
-	return f * (180.f / M_PI);
-}
-
-inline float Deg2Rad(const float &f)
-{
-	return f * (M_PI / 180.f);
-}
+#define RAD2DEG(f) (f * (180.0f / M_PI))
+#define DEG2RAD(f) (f * (M_PI / 180.0f))
 
 // Trigonometry
 
-inline void SinCos(const float &f, float &s, float &c)
+inline void SinCos(const float f, float &s, float &c)
 {
 	s = (float)sin(f);
 	c = (float)cos(f);
 }
 
-inline float ATan2(const float &y, const float &x)
+inline float ATan2(const float y, const float x)
 {
 	return (float)atan2(y, x);
 }
 
 // Rounding Functions
 
-inline float Floor(const float &f)
+inline float Floor(const float f)
 {
 	__m128 mm1 = _mm_set_ss(f);
 
@@ -44,7 +36,7 @@ inline float Floor(const float &f)
 
 // Sqrt Function
 
-inline float Sqrt(const float &f)
+inline float Sqrt(const float f)
 {
 	__m128 mm1 = _mm_set_ss(f);
 
@@ -55,14 +47,16 @@ inline float Sqrt(const float &f)
 
 // Angle Normalization
 
-inline void _NormalizeAngle(float &a)
+inline float _NormalizeAngle(float a)
 {
 	if (!(a > 180.f || a < -180.f))
-		return;
+		return a;
 
 	float r = Floor((-a + 180.f) / 360.f);
 
-	r *= 360;
+	r *= 360.f;
 
 	a += r;
+
+	return a;
 }
