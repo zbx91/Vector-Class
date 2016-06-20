@@ -14,34 +14,34 @@ public:
 	Vector2D();
 	Vector2D(float, float);
 
-	float	&operator[](char);
+	float		&operator[](char);
 	Vector2D	&operator=(const Vector2D &);
 
-	FORCEINLINE Vector2D	&operator+=(const Vector2D &);
-	FORCEINLINE Vector2D	&operator-=(const Vector2D &);
-	FORCEINLINE Vector2D	&operator*=(const float);
-	FORCEINLINE Vector2D	&operator/=(const float);
+	Vector2D	&operator+=(const Vector2D &);
+	Vector2D	&operator-=(const Vector2D &);
+	Vector2D	&operator*=(const float);
+	Vector2D	&operator/=(const float);
 
 	Vector2D	operator+(const Vector2D &) const;
 	Vector2D	operator-(const Vector2D &) const;
 	Vector2D	operator*(const float) const;
 	Vector2D	operator/(const float) const;
 
-	bool	operator==(const Vector2D &) const;
-	bool	operator!=(const Vector2D &) const;
+	bool		operator==(const Vector2D &) const;
+	bool		operator!=(const Vector2D &) const;
 
-	void	Rotate(const float);
+	void		Rotate(const float);
 
-	float	Length() const;
-	FORCEINLINE float	LengthSqr() const;
+	float		Length() const;
+	float		LengthSqr() const;
 
-	float	DistTo(const Vector2D &) const;
-	FORCEINLINE float	DistToSqr(const Vector2D &) const;
-	bool	WithinAARect(const Vector2D &, const Vector2D &) const;
+	float		DistTo(const Vector2D &) const;
+	float		DistToSqr(const Vector2D &) const;
+	bool		WithinAARect(const Vector2D &, const Vector2D &) const;
 
-	FORCEINLINE float	Dot(const Vector2D &) const;
+	float		Dot(const Vector2D &) const;
 
-	float	Normalize();
+	float		Normalize();
 
 	float	ToAngle() const;
 
@@ -260,54 +260,54 @@ public:
 	float		&operator[](char);
 	Euler		&operator=(const Euler &);
 
-	FORCEINLINE Euler		&operator+=(const Euler &);
-	FORCEINLINE Euler		&operator-=(const Euler &);
-	FORCEINLINE Euler		&operator*=(const float);
-	FORCEINLINE Euler		&operator/=(const float);
+	Euler		&operator+=(const Euler &);
+	Euler		&operator-=(const Euler &);
+	Euler		&operator*=(const float);
+	Euler		&operator/=(const float);
 
-	Euler	operator+(const Euler &) const;
-	Euler	operator-(const Euler &) const;
-	Euler	operator*(const float) const;
-	Euler	operator/(const float) const;
+	Euler		operator+(const Euler &) const;
+	Euler		operator-(const Euler &) const;
+	Euler		operator*(const float) const;
+	Euler		operator/(const float) const;
 
-	bool	operator==(const Euler &) const;
-	bool	operator!=(const Euler &) const;
+	bool		operator==(const Euler &) const;
+	bool		operator!=(const Euler &) const;
 
-	float	Length() const;
-	FORCEINLINE float	LengthSqr() const;
-	float	Length2D() const;
-	FORCEINLINE float	Length2DSqr() const;
+	float		Length() const;
+	float		LengthSqr() const;
+	float		Length2D() const;
+	float		Length2DSqr() const;
 
-	float	DistTo(const Vector &) const;
-	FORCEINLINE float	DistToSqr(const Vector &) const;
-	bool	WithinAABox(const Vector &, const Vector &) const;
+	float		DistTo(const Vector &) const;
+	float		DistToSqr(const Vector &) const;
+	bool		WithinAABox(const Vector &, const Vector &) const;
 
-	void	Rotate(const Angle &);
-	void	Rotate2D(const float);
+	void		Rotate(const Angle &);
+	void		Rotate2D(const float);
 
-	Vector	Cross(const Vector &) const;
-	FORCEINLINE float	Dot(const Vector &) const;
+	Vector		Cross(const Vector &) const;
+	float		Dot(const Vector &) const;
 
-	float	NormalizeVector();
-	void	NormalizeAngle();
+	float		NormalizeVector();
+	void		NormalizeAngle();
 
-	Angle	ToAngle() const;
-	Vector	ToVector() const;
+	Angle		ToAngle() const;
+	Vector		ToVector() const;
 	Vector2D	ToVector2D() const;
 
-	Vector	Forward() const;
-	Vector	Right() const;
-	Vector	Up() const;
+	Vector		Forward() const;
+	Vector		Right() const;
+	Vector		Up() const;
 
-	void	Random(const float, const float);
-	void	Negate();
-	void	Clear();
+	void		Random(const float, const float);
+	void		Negate();
+	void		Clear();
 
-	void	CopyToArray(float *) const;
-	float	*Base() const;
+	void		CopyToArray(float *) const;
+	float		*Base() const;
 
-	bool	IsValid() const;
-	bool	IsZero(const float) const;
+	bool		IsValid() const;
+	bool		IsZero(const float) const;
 };
 
 inline Euler::Euler()
