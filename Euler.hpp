@@ -2,7 +2,7 @@
 
 #define FORCEINLINE __forceinline
 
-#include "Math.hpp"
+#include "Math.hpp" // See Math Class in Github
 
 // Vector Two Dimensional
 
@@ -43,17 +43,17 @@ public:
 
 	float		Normalize();
 
-	float	ToAngle() const;
+	float		ToAngle() const;
 
-	void	Random(const float, const float);
-	void	Negate();
-	void	Clear();
+	void		Random(const float, const float);
+	void		Negate();
+	void		Clear();
 
-	void	CopyToArray(float *) const;
-	float	*Base() const;
+	void		CopyToArray(float *) const;
+	float		*Base() const;
 
-	bool	IsValid() const;
-	bool	IsZero(const float) const;
+	bool		IsValid() const;
+	bool		IsZero(const float) const;
 };
 
 inline Vector2D::Vector2D()
@@ -175,7 +175,7 @@ inline void Vector2D::Rotate(const float f)
 
 	float s, c;
 
-	SinCos(DEG2RAD(f), s, c);
+	FastSinCos(DEG2RAD(f), s, c);
 
 	_x = x;
 	_y = y;
@@ -437,8 +437,8 @@ FORCEINLINE float Euler::DistToSqr(const Vector &v) const
 inline bool Euler::WithinAABox(const Vector &min, const Vector &max) const
 {
 	return ((x > min.x) && (x < max.x) &&
-			(y > min.y) && (y < max.y) &&
-			(z > min.z) && (z < max.z));
+		(y > min.y) && (y < max.y) &&
+		(z > min.z) && (z < max.z));
 }
 
 inline void Euler::Rotate(const Angle &a)
@@ -447,7 +447,7 @@ inline void Euler::Rotate(const Angle &a)
 
 	float s, c;
 
-	SinCos(DEG2RAD(a.x), s, c);
+	FastSinCos(DEG2RAD(a.x), s, c);
 
 	_y = y;
 	_z = z;
@@ -455,7 +455,7 @@ inline void Euler::Rotate(const Angle &a)
 	y = (_y * c) - (_z * s);
 	z = (_y * s) + (_z * c);
 
-	SinCos(DEG2RAD(a.y), s, c);
+	FastSinCos(DEG2RAD(a.y), s, c);
 
 	_x = x;
 	_z = z;
@@ -463,7 +463,7 @@ inline void Euler::Rotate(const Angle &a)
 	x = (_x * c) + (_z * s);
 	z = (-_x * s) + (_z * c);
 
-	SinCos(DEG2RAD(a.z), s, c);
+	FastSinCos(DEG2RAD(a.z), s, c);
 
 	_x = x;
 	_y = y;
@@ -478,7 +478,7 @@ inline void Euler::Rotate2D(const float f)
 
 	float s, c;
 
-	SinCos(DEG2RAD(f), s, c);
+	FastSinCos(DEG2RAD(f), s, c);
 
 	_x = x;
 	_y = y;
@@ -516,7 +516,7 @@ inline void Euler::NormalizeAngle()
 	z = _NormalizeAngle(z);
 }
 
-inline Angle &Euler::ToAngle() const
+inline Angle Euler::ToAngle() const
 {
 	if (x == 0.f && y == 0.f)
 		return Angle(z > 0.f ? -90.f : 90.f, 0.f, 0.f);
@@ -528,8 +528,8 @@ inline Vector Euler::ToVector() const
 {
 	float sx, cx, sy, cy;
 
-	SinCos(DEG2RAD(x), sx, cx);
-	SinCos(DEG2RAD(y), sy, cy);
+	FastSinCos(DEG2RAD(x), sx, cx);
+	FastSinCos(DEG2RAD(y), sy, cy);
 
 	return Vector(sx * cy, sx*sy, cx);
 }
@@ -543,8 +543,8 @@ inline Vector Euler::Forward() const
 {
 	float sx, cx, sy, cy;
 
-	SinCos(DEG2RAD(x), sx, cx);
-	SinCos(DEG2RAD(y), sy, cy);
+	FastSinCos(DEG2RAD(x), sx, cx);
+	FastSinCos(DEG2RAD(y), sy, cy);
 
 	return Vector(sx * cy, sx * sy, cx);
 }
@@ -553,9 +553,9 @@ inline Vector Euler::Right() const
 {
 	float sx, cx, sy, cy, sz, cz;
 
-	SinCos(DEG2RAD(x), sx, cx);
-	SinCos(DEG2RAD(y), sy, cy);
-	SinCos(DEG2RAD(z), sz, cz);
+	FastSinCos(DEG2RAD(x), sx, cx);
+	FastSinCos(DEG2RAD(y), sy, cy);
+	FastSinCos(DEG2RAD(z), sz, cz);
 
 	return Vector((-sx * cy * sz) + (cz * sy), (-sx * sy * sz) - (cy * cz), -cx * sz);
 }
@@ -564,9 +564,9 @@ inline Vector Euler::Up() const
 {
 	float sx, cx, sy, cy, sz, cz;
 
-	SinCos(DEG2RAD(x), sx, cx);
-	SinCos(DEG2RAD(y), sy, cy);
-	SinCos(DEG2RAD(z), sz, cz);
+	FastSinCos(DEG2RAD(x), sx, cx);
+	FastSinCos(DEG2RAD(y), sy, cy);
+	FastSinCos(DEG2RAD(z), sz, cz);
 
 	return Vector((sx * cy * cz) + (sy * sz), (sx * sy * cz) - (cy * sz), cx * cz);
 }
@@ -638,12 +638,12 @@ inline void VectorToAngle(const Vector &v, Angle &a)
 	a.z = 0.f;
 }
 
-inline void AngleToVector(const Angle &a, Vector *forward,  Vector *right, Vector *up)
+inline void AngleToVector(const Angle &a, Vector *forward, Vector *right, Vector *up)
 {
 	float sx, cx, sy, cy, sz, cz;
-	SinCos(Deg2Rad(a.x), sx, cx);
-	SinCos(Deg2Rad(a.y), sy, cy);
-	SinCos(Deg2Rad(a.z), sz, cz);
+	FastSinCos(DEG2RAD(a.x), sx, cx);
+	FastSinCos(DEG2RAD(a.y), sy, cy);
+	FastSinCos(DEG2RAD(a.z), sz, cz);
 
 	if (forward)
 	{
