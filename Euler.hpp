@@ -14,7 +14,7 @@ public:
 	Vector2D();
 	Vector2D(float, float);
 
-	float		&operator[](char);
+	float		&operator[](unsigned char);
 	Vector2D	&operator=(const Vector2D &);
 
 	Vector2D	&operator+=(const Vector2D &);
@@ -67,7 +67,7 @@ inline Vector2D::Vector2D(float _x, float _y)
 	y = _y;
 }
 
-inline float &Vector2D::operator[](char i)
+inline float &Vector2D::operator[](unsigned char i)
 {
 	return ((float *)this)[i];
 }
@@ -257,7 +257,7 @@ public:
 	Euler();
 	Euler(float, float, float);
 
-	float		&operator[](char);
+	float		&operator[](unsigned char);
 	Euler		&operator=(const Euler &);
 
 	Euler		&operator+=(const Euler &);
@@ -322,7 +322,7 @@ inline Euler::Euler(float _x, float _y, float _z)
 	z = _z;
 }
 
-inline float &Euler::operator[](char i)
+inline float &Euler::operator[](unsigned char i)
 {
 	return ((float *)this)[i];
 }
